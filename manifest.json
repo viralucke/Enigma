@@ -1,0 +1,18 @@
+{
+  "name": "Энигма — Защищённый контур",
+  "short_name": "Энигма",
+  "description": "Приватный мессенджер со сквозным шифрованием AES-256-GCM",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#06080d",
+  "theme_color": "#07090e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23f5d77f'/%3E%3Cstop offset='100%25' stop-color='%23b68928'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='%2307090e'/%3E%3Ccircle cx='256' cy='256' r='176' fill='none' stroke='url(%23g)' stroke-width='14' stroke-dasharray='44 22'/%3E%3Cpath d='M192 224v-40a64 64 0 0 1 128 0v40h16a24 24 0 0 1 24 24v104a24 24 0 0 1-24 24H176a24 24 0 0 1-24-24V248a24 24 0 0 1 24-24h16zm32 0h64v-40a32 32 0 0 0-64 0v40z' fill='url(%23g)'/%3E%3C/svg%3E",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
