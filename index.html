@@ -1483,12 +1483,12 @@
       fileBlobCache: {},
       avatarUrlCache: {},
       selectedGroupTab: 'all',
-      activeChat: null, // { type: 'group'|'direct', id: string, title: string, avatarFileId: string, isAdmin: boolean }
+      activeChat: null,
       pinnedChats: JSON.parse(localStorage.getItem('enigma_pinned') || '[]'),
       mutedChats: JSON.parse(localStorage.getItem('enigma_muted') || '[]'),
       lastReadMap: JSON.parse(localStorage.getItem('enigma_last_read') || '{}'),
       authMode: 'login',
-      composerMode: null, // null | { mode: 'reply'|'edit', msg: object }
+      composerMode: null,
       contextMsg: null,
       syncTimer: null,
       isSyncing: false,
@@ -1853,7 +1853,6 @@
         state.contacts = res.contacts || [];
         localStorage.setItem('enigma_user', JSON.stringify(res.user));
 
-        // Расшифровка новых сообщений
         const rawMsgs = res.messages || [];
         const deliveredToAck = [];
         const readToAck = [];
@@ -1870,11 +1869,9 @@
           }
           m._dec = state.decryptedCache[cacheKey];
 
-          // Подтверждение доставки
           if (m.sender_id !== state.user.user_id && !(m.delivered_to || []).includes(state.user.user_id)) {
             deliveredToAck.push(m.msg_id);
           }
-          // Подтверждение прочтения, если открыт этот чат
           if (state.activeChat && isMsgInChat(m, state.activeChat) && m.sender_id !== state.user.user_id) {
             if (!(m.read_by || []).includes(state.user.user_id)) {
               readToAck.push(m.msg_id);
@@ -1883,8 +1880,6 @@
         }
 
         state.messages = rawMsgs.filter(m => m.content_type !== 'deleted');
-
-        // Подгрузка аватарок
         preloadAvatars();
 
         renderGroupTabs();
@@ -2013,7 +2008,6 @@
       const brandTitle = document.getElementById('headerBrandTitle');
       const userGroups = state.groups || [];
 
-      // У обычного пользователя с 1 группой полоса вкладок скрыта, а название группы в шапке
       if (!state.user.is_admin && userGroups.length <= 1) {
         bar.classList.add('hidden');
         state.selectedGroupTab = userGroups[0] || 'all';
@@ -2046,7 +2040,6 @@
       const items = [];
       const activeGroupFilter = state.selectedGroupTab;
 
-      // 1. Групповые чаты
       const visibleGroups = activeGroupFilter === 'all'
         ? state.groups
         : state.groups.filter(g => g === activeGroupFilter);
@@ -2062,7 +2055,6 @@
         });
       });
 
-      // 2. Личные диалоги с контактами (Админ всегда виден)
       state.contacts.forEach(c => {
         if (c.user_id === state.user.user_id) return;
         if (activeGroupFilter !== 'all' && !c.is_admin && !(c.groups || []).includes(activeGroupFilter)) {
@@ -2078,7 +2070,6 @@
         });
       });
 
-      // Обогащаем последним сообщением, непрочитанными, закрепами
       return items
         .filter(item => !query || item.title.toLowerCase().includes(query))
         .map(item => {
@@ -2305,7 +2296,6 @@
               <div class="file-icon-box">IMG</div>
               <div><div style="font-weight:600; font-size:13px;">Нажмите для загрузки фото</div><div style="font-size:11px; color:var(--text-muted);">${formatBytes(m.size)}</div></div>
             </div>`;
-            // Автозагрузка превью фото
             setTimeout(() => downloadAndOpenAttachment(m.msg_id, false), 50);
           }
           if (dec.text) bodyHtml += `<div class="msg-text">${escapeHtml(dec.text)}</div>`;
@@ -2335,7 +2325,6 @@
           bodyHtml = `<div class="msg-text">${escapeHtml(dec.text || '')}</div>`;
         }
 
-        // Реакции
         const reactions = dec.reactions || {};
         const reactionEntries = Object.entries(reactions).filter(([, users]) => Array.isArray(users) && users.length > 0);
         const reactionsHtml = reactionEntries.length
@@ -2345,7 +2334,6 @@
             }).join('')}</div>`
           : '';
 
-        // Галочки доставки и прочтения
         let ticksHtml = '';
         if (isOut) {
           const othersRead = (m.read_by || []).filter(uid => uid !== state.user.user_id);
@@ -2427,7 +2415,6 @@
       inp.value = '';
       onComposerInput();
 
-      // Если режим редактирования
       if (state.composerMode && state.composerMode.mode === 'edit') {
         const targetMsg = state.composerMode.msg;
         clearComposerMode();
@@ -2929,11 +2916,11 @@
     /* ==================== УТИЛИТЫ ==================== */
     function escapeHtml(str) {
       return String(str || '')
-        .replace(/&/g, '&')
-        .replace(/</g, '<')
-        .replace(/>/g, '>')
-        .replace(/"/g, '"')
-        .replace(/'/g, ''');
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function formatBytes(bytes) {
