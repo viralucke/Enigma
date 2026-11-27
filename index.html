@@ -25,11 +25,12 @@
     :root {
       --bg: #0b0d12;
       --glass: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(212, 175, 55, 0.22);
+      --glass-border: rgba(212, 175, 55, 0.24);
       --gold: #d4af37;
       --gold-soft: rgba(212, 175, 55, 0.14);
       --text: #f3f4f6;
       --muted: #9ca3af;
+      --danger: #f87171;
       --own-msg: rgba(212, 175, 55, 0.18);
       --other-msg: rgba(255, 255, 255, 0.07);
     }
@@ -43,14 +44,93 @@
       flex-direction: column;
       overflow: hidden;
     }
+
+    /* ЭКРАН АВТОРИЗАЦИИ */
+    #authScreen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: radial-gradient(circle at top right, #171c28, var(--bg) 65%);
+      z-index: 100;
+    }
+    #authScreen.hidden { display: none; }
+    .auth-card {
+      width: 100%;
+      max-width: 390px;
+      background: rgba(18, 22, 32, 0.92);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      backdrop-filter: blur(16px);
+    }
+    .auth-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      border: 1.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--gold);
+      background: var(--gold-soft);
+      flex-shrink: 0;
+    }
+    .auth-head h1 {
+      font-size: 18px;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+    .auth-head p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .field input {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--glass-border);
+      border-radius: 11px;
+      padding: 11px 13px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    .field input:focus { border-color: var(--gold); }
+    .auth-error {
+      font-size: 12px;
+      color: var(--danger);
+      min-height: 16px;
+    }
+
+    /* ОСНОВНОЙ ИНТЕРФЕЙС ЧАТА */
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
-      background: rgba(11, 13, 18, 0.85);
+      padding: 12px 14px;
+      background: rgba(11, 13, 18, 0.88);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--glass-border);
       z-index: 10;
     }
@@ -59,20 +139,8 @@
       align-items: center;
       gap: 10px;
     }
-    .logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      border: 1.5px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: var(--gold);
-      background: var(--gold-soft);
-    }
-    .title-wrap h1 {
-      font-size: 16px;
+    .title-wrap h2 {
+      font-size: 15px;
       letter-spacing: 1.5px;
       color: var(--gold);
     }
@@ -82,15 +150,15 @@
     }
     .header-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
     .icon-btn {
       background: var(--glass);
       border: 1px solid var(--glass-border);
       color: var(--text);
-      padding: 8px 11px;
+      padding: 7px 10px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
     }
     .icon-btn:active { transform: scale(0.97); }
@@ -107,7 +175,6 @@
       padding: 10px 14px;
       border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
       line-height: 1.4;
       font-size: 14px;
       word-wrap: break-word;
@@ -130,7 +197,7 @@
       font-size: 11px;
       color: var(--gold);
       margin-bottom: 4px;
-      opacity: 0.85;
+      opacity: 0.9;
     }
     .msg-time { color: var(--muted); }
     .empty-state {
@@ -166,13 +233,15 @@
       border-radius: 12px;
       padding: 0 18px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
     }
+
+    /* МОДАЛЬНОЕ ОКНО НАСТРОЕК И БЭКАПА */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.72);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
@@ -183,7 +252,7 @@
     .modal-backdrop.open { display: flex; }
     .modal {
       width: 100%;
-      max-width: 420px;
+      max-width: 410px;
       background: #121620;
       border: 1px solid var(--glass-border);
       border-radius: 18px;
@@ -191,30 +260,10 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      max-height: 90dvh;
-      overflow-y: auto;
     }
-    .modal h2 {
-      font-size: 17px;
+    .modal h3 {
+      font-size: 16px;
       color: var(--gold);
-    }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .field label {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .field input {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: var(--text);
-      font-size: 14px;
-      outline: none;
     }
     .btn-row {
       display: flex;
@@ -223,8 +272,8 @@
     }
     .btn {
       flex: 1;
-      padding: 10px 12px;
-      border-radius: 10px;
+      padding: 11px 12px;
+      border-radius: 11px;
       border: 1px solid var(--glass-border);
       background: var(--glass);
       color: var(--text);
@@ -238,31 +287,68 @@
       color: #0b0d12;
       border-color: var(--gold);
     }
+    .btn.danger {
+      border-color: rgba(248, 113, 113, 0.4);
+      color: var(--danger);
+    }
     .divider {
       height: 1px;
       background: var(--glass-border);
-      margin: 4px 0;
     }
   </style>
 </head>
 <body>
+
+  <!-- ЭКРАН ВХОДА -->
+  <section id="authScreen">
+    <form class="auth-card" id="loginForm">
+      <div class="auth-head">
+        <div class="logo">E</div>
+        <div>
+          <h1>ENIGMA</h1>
+          <p>Закрытый доступ</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>URL веб-приложения Google Apps Script</label>
+        <input type="url" id="authGasUrl" placeholder="https://script.google.com/macros/s/.../exec" required />
+      </div>
+
+      <div class="field">
+        <label>Логин</label>
+        <input type="text" id="authLogin" placeholder="nikolay" autocomplete="username" required />
+      </div>
+
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password" required />
+      </div>
+
+      <div class="auth-error" id="authError"></div>
+
+      <button type="submit" class="btn primary" id="loginSubmitBtn">Войти в Enigma</button>
+    </form>
+  </section>
+
+  <!-- ЭКРАН ЧАТА -->
   <header>
     <div class="brand">
       <div class="logo">E</div>
       <div class="title-wrap">
-        <h1>ENIGMA</h1>
-        <div class="status" id="statusText">Локальный режим</div>
+        <h2>ENIGMA</h2>
+        <div class="status" id="statusText">Подключение...</div>
       </div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" id="pushBtn" title="Включить пуши">Уведомления</button>
+      <button class="icon-btn" id="pushBtn" title="Включить пуши">Пуши</button>
       <button class="icon-btn" id="syncBtn" title="Обновить">↻</button>
-      <button class="icon-btn" id="settingsBtn" title="Настройки и бэкап">⚙</button>
+      <button class="icon-btn" id="settingsBtn" title="Бэкап и выход">⚙</button>
     </div>
   </header>
 
   <main id="messages">
-    <div class="empty-state">Сообщений пока нет. Напиши первое сообщение или укажи ссылку на Google Таблицу в настройках (⚙).</div>
+    <div class="empty-state">Загрузка сообщений...</div>
   </main>
 
   <form class="composer" id="chatForm">
@@ -270,41 +356,37 @@
     <button type="submit" class="send-btn">→</button>
   </form>
 
+  <!-- НАСТРОЙКИ / БЭКАП / ВЫХОД -->
   <div class="modal-backdrop" id="settingsModal">
     <div class="modal">
-      <h2>Настройки и резервное сохранение</h2>
-      <div class="field">
-        <label>Твоё имя в чате</label>
-        <input type="text" id="userNameInput" placeholder="Например: Николай" />
-      </div>
-      <div class="field">
-        <label>URL веб-приложения Google Apps Script</label>
-        <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" />
-      </div>
-      <div class="btn-row">
-        <button type="button" class="btn primary" id="saveSettingsBtn">Сохранить настройки</button>
-      </div>
+      <h3>Аккаунт и резервная копия</h3>
+      <div class="status" id="accountInfo"></div>
 
       <div class="divider"></div>
       <div class="field">
-        <label>Резервное сохранение (файл .json на устройство)</label>
+        <label>Резервное сохранение переписки (.json)</label>
         <div class="btn-row">
           <button type="button" class="btn" id="exportBackupBtn">⬇ Скачать бэкап (.json)</button>
-          <button type="button" class="btn" id="importBackupBtn">⬆ Восстановить из .json</button>
+          <button type="button" class="btn" id="importBackupBtn">⬆ Восстановить .json</button>
           <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" />
         </div>
       </div>
 
       <div class="divider"></div>
-      <button type="button" class="btn" id="closeModalBtn">Закрыть</button>
+      <div class="btn-row">
+        <button type="button" class="btn danger" id="logoutBtn">Выйти из аккаунта</button>
+        <button type="button" class="btn" id="closeModalBtn">Закрыть</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "enigma_state_v1";
+    const STORAGE_KEY = "enigma_secure_v2";
     let state = {
-      userName: "Николай",
       gasUrl: "",
+      token: "",
+      login: "",
+      displayName: "",
       messages: []
     };
 
@@ -313,13 +395,22 @@
       if (saved) state = { ...state, ...saved };
     } catch (e) {}
 
+    const authScreen = document.getElementById("authScreen");
+    const loginForm = document.getElementById("loginForm");
+    const authGasUrl = document.getElementById("authGasUrl");
+    const authLogin = document.getElementById("authLogin");
+    const authPassword = document.getElementById("authPassword");
+    const authError = document.getElementById("authError");
+    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+
     const messagesEl = document.getElementById("messages");
     const statusText = document.getElementById("statusText");
     const chatForm = document.getElementById("chatForm");
     const msgInput = document.getElementById("msgInput");
     const settingsModal = document.getElementById("settingsModal");
-    const userNameInput = document.getElementById("userNameInput");
-    const gasUrlInput = document.getElementById("gasUrlInput");
+    const accountInfo = document.getElementById("accountInfo");
+
+    let pollTimer = null;
 
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -332,19 +423,44 @@
         .replace(/>/g, ">");
     }
 
+    async function callApi(payload) {
+      const res = await fetch(state.gasUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    }
+
+    function showAuthScreen(errorMsg = "") {
+      if (pollTimer) clearInterval(pollTimer);
+      authGasUrl.value = state.gasUrl || "";
+      authLogin.value = state.login || "";
+      authPassword.value = "";
+      authError.textContent = errorMsg;
+      authScreen.classList.remove("hidden");
+    }
+
+    function showChatScreen() {
+      authScreen.classList.add("hidden");
+      renderMessages();
+      syncMessages();
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(syncMessages, 8000);
+    }
+
     function renderMessages() {
       if (!state.messages.length) {
-        messagesEl.innerHTML = '<div class="empty-state">Сообщений пока нет. Напиши первое сообщение или укажи ссылку на Google Таблицу в настройках (⚙).</div>';
+        messagesEl.innerHTML = '<div class="empty-state">Сообщений пока нет. Напиши первое сообщение.</div>';
         return;
       }
       messagesEl.innerHTML = state.messages.map(m => {
-        const isOwn = m.author === state.userName;
-        const time = m.time || "";
+        const isOwn = (m.login && m.login === state.login) || m.author === state.displayName;
         return `
           <div class="msg ${isOwn ? "own" : "other"}">
             <div class="msg-meta">
               <span>${escapeHtml(m.author || "Участник")}</span>
-              <span class="msg-time">${escapeHtml(time)}</span>
+              <span class="msg-time">${escapeHtml(m.time || "")}</span>
             </div>
             <div>${escapeHtml(m.text)}</div>
           </div>
@@ -354,24 +470,61 @@
     }
 
     async function syncMessages() {
-      if (!state.gasUrl) {
-        statusText.textContent = "Локальный режим";
-        return;
-      }
-      statusText.textContent = "Синхронизация...";
+      if (!state.gasUrl || !state.token) return;
       try {
-        const res = await fetch(state.gasUrl + "?action=get");
-        const data = await res.json();
+        const data = await callApi({ action: "get", token: state.token });
+        if (!data.ok) {
+          if (data.error === "UNAUTHORIZED") {
+            state.token = "";
+            saveState();
+            showAuthScreen("Сессия истекла. Войдите снова.");
+          }
+          return;
+        }
         if (Array.isArray(data.messages)) {
           state.messages = data.messages;
           saveState();
           renderMessages();
         }
-        statusText.textContent = "Подключено к Google Таблице";
+        statusText.textContent = `${state.displayName} • в сети`;
       } catch (e) {
-        statusText.textContent = "Ошибка связи с таблицей";
+        statusText.textContent = "Ошибка соединения";
       }
     }
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      authError.textContent = "";
+      loginSubmitBtn.disabled = true;
+      loginSubmitBtn.textContent = "Проверка...";
+
+      state.gasUrl = authGasUrl.value.trim();
+      const loginVal = authLogin.value.trim().toLowerCase();
+      const passVal = authPassword.value;
+
+      try {
+        const data = await callApi({
+          action: "login",
+          login: loginVal,
+          password: passVal
+        });
+
+        if (data.ok && data.token) {
+          state.token = data.token;
+          state.login = loginVal;
+          state.displayName = data.displayName || loginVal;
+          saveState();
+          showChatScreen();
+        } else {
+          authError.textContent = data.error || "Ошибка входа";
+        }
+      } catch (err) {
+        authError.textContent = "Не удалось связаться со скриптом. Проверь URL и доступ «Все».";
+      } finally {
+        loginSubmitBtn.disabled = false;
+        loginSubmitBtn.textContent = "Войти в Enigma";
+      }
+    });
 
     chatForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -381,32 +534,32 @@
 
       const now = new Date();
       const timeStr = now.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-      const msgObj = {
-        id: Date.now().toString(),
-        author: state.userName || "Николай",
+      state.messages.push({
+        id: String(Date.now()),
+        login: state.login,
+        author: state.displayName,
         text,
-        time: timeStr,
-        iso: now.toISOString()
-      };
-
-      state.messages.push(msgObj);
+        time: timeStr
+      });
       saveState();
       renderMessages();
+      statusText.textContent = "Отправка...";
 
-      if (state.gasUrl) {
-        statusText.textContent = "Отправка...";
-        try {
-          await fetch(state.gasUrl, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "send", message: msgObj })
-          });
-          statusText.textContent = "Отправлено";
-          setTimeout(syncMessages, 1200);
-        } catch (err) {
-          statusText.textContent = "Сохранено локально";
+      try {
+        const data = await callApi({
+          action: "send",
+          token: state.token,
+          text: text
+        });
+        if (!data.ok && data.error === "UNAUTHORIZED") {
+          state.token = "";
+          saveState();
+          showAuthScreen("Сессия истекла. Войдите снова.");
+          return;
         }
+        await syncMessages();
+      } catch (err) {
+        statusText.textContent = "Ошибка отправки";
       }
     });
 
@@ -420,8 +573,7 @@
     document.getElementById("syncBtn").addEventListener("click", syncMessages);
 
     document.getElementById("settingsBtn").addEventListener("click", () => {
-      userNameInput.value = state.userName || "";
-      gasUrlInput.value = state.gasUrl || "";
+      accountInfo.textContent = `Вы вошли как: ${state.displayName} (${state.login})`;
       settingsModal.classList.add("open");
     });
 
@@ -429,18 +581,24 @@
       settingsModal.classList.remove("open");
     });
 
-    document.getElementById("saveSettingsBtn").addEventListener("click", () => {
-      state.userName = userNameInput.value.trim() || "Николай";
-      state.gasUrl = gasUrlInput.value.trim();
-      saveState();
-      renderMessages();
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
       settingsModal.classList.remove("open");
-      syncMessages();
+      try {
+        await callApi({ action: "logout", token: state.token });
+      } catch (e) {}
+      state.token = "";
+      state.messages = [];
+      saveState();
+      showAuthScreen();
     });
 
     document.getElementById("exportBackupBtn").addEventListener("click", () => {
       const dateStr = new Date().toISOString().slice(0, 10);
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        messages: state.messages
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -464,25 +622,25 @@
         try {
           const imported = JSON.parse(reader.result);
           if (imported && Array.isArray(imported.messages)) {
-            state = { ...state, ...imported };
+            state.messages = imported.messages;
             saveState();
             renderMessages();
-            alert("Резервная копия успешно восстановлена!");
+            alert("Резервная копия загружена на экран!");
           } else {
-            alert("Неверный формат файла резервной копии.");
+            alert("Неверный формат файла бэкапа.");
           }
         } catch (err) {
-          alert("Ошибка чтения файла бэкапа.");
+          alert("Ошибка чтения файла.");
         }
       };
       reader.readAsText(file);
       importFileInput.value = "";
     });
 
-    renderMessages();
-    if (state.gasUrl) {
-      syncMessages();
-      setInterval(syncMessages, 15000);
+    if (state.gasUrl && state.token) {
+      showChatScreen();
+    } else {
+      showAuthScreen();
     }
   </script>
 </body>
