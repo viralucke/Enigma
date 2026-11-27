@@ -27,7 +27,7 @@
       --glass: rgba(255, 255, 255, 0.05);
       --glass-border: rgba(212, 175, 55, 0.24);
       --gold: #d4af37;
-      --gold-soft: rgba(212, 175, 55, 0.14);
+      --gold-soft: rgba(212, 175, 55, 0.16);
       --text: #f3f4f6;
       --muted: #9ca3af;
       --danger: #f87171;
@@ -60,7 +60,7 @@
     .auth-card {
       width: 100%;
       max-width: 390px;
-      background: rgba(18, 22, 32, 0.92);
+      background: rgba(18, 22, 32, 0.94);
       border: 1px solid var(--glass-border);
       border-radius: 20px;
       padding: 24px 20px;
@@ -101,7 +101,7 @@
     .field {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
     .field label {
       font-size: 12px;
@@ -123,13 +123,13 @@
       min-height: 16px;
     }
 
-    /* ОСНОВНОЙ ИНТЕРФЕЙС ЧАТА */
+    /* ШАПКА И ВКЛАДКИ ГРУПП */
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 12px 14px;
-      background: rgba(11, 13, 18, 0.88);
+      background: rgba(11, 13, 18, 0.9);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--glass-border);
       z-index: 10;
@@ -162,6 +162,36 @@
       cursor: pointer;
     }
     .icon-btn:active { transform: scale(0.97); }
+
+    .tags-bar {
+      display: flex;
+      gap: 8px;
+      padding: 9px 14px;
+      background: rgba(11, 13, 18, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tags-bar::-webkit-scrollbar { display: none; }
+    .tag-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.15s ease;
+    }
+    .tag-pill.active {
+      background: var(--gold);
+      color: #0b0d12;
+      border-color: var(--gold);
+    }
+
+    /* СООБЩЕНИЯ */
     #messages {
       flex: 1;
       overflow-y: auto;
@@ -212,7 +242,7 @@
       display: flex;
       gap: 8px;
       padding: 12px 14px;
-      background: rgba(11, 13, 18, 0.92);
+      background: rgba(11, 13, 18, 0.94);
       border-top: 1px solid var(--glass-border);
     }
     .composer input {
@@ -237,7 +267,7 @@
       cursor: pointer;
     }
 
-    /* МОДАЛЬНОЕ ОКНО НАСТРОЕК И БЭКАПА */
+    /* МОДАЛЬНОЕ ОКНО НАСТРОЕК */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -252,7 +282,7 @@
     .modal-backdrop.open { display: flex; }
     .modal {
       width: 100%;
-      max-width: 410px;
+      max-width: 390px;
       background: #121620;
       border: 1px solid var(--glass-border);
       border-radius: 18px;
@@ -268,7 +298,6 @@
     .btn-row {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
     }
     .btn {
       flex: 1;
@@ -306,7 +335,7 @@
         <div class="logo">E</div>
         <div>
           <h1>ENIGMA</h1>
-          <p>Закрытый доступ</p>
+          <p>Закрытый чат • AES-256</p>
         </div>
       </div>
 
@@ -316,8 +345,8 @@
       </div>
 
       <div class="field">
-        <label>Логин</label>
-        <input type="text" id="authLogin" placeholder="nikolay" autocomplete="username" required />
+        <label>Логин (Ник)</label>
+        <input type="text" id="authLogin" placeholder="Nik" autocomplete="username" required />
       </div>
 
       <div class="field">
@@ -343,34 +372,27 @@
     <div class="header-actions">
       <button class="icon-btn" id="pushBtn" title="Включить пуши">Пуши</button>
       <button class="icon-btn" id="syncBtn" title="Обновить">↻</button>
-      <button class="icon-btn" id="settingsBtn" title="Бэкап и выход">⚙</button>
+      <button class="icon-btn" id="settingsBtn" title="Профиль">⚙</button>
     </div>
   </header>
+
+  <nav class="tags-bar" id="tagsBar"></nav>
 
   <main id="messages">
     <div class="empty-state">Загрузка сообщений...</div>
   </main>
 
   <form class="composer" id="chatForm">
-    <input type="text" id="msgInput" placeholder="Сообщение..." autocomplete="off" required />
+    <input type="text" id="msgInput" placeholder="Сообщение в Общий..." autocomplete="off" required />
     <button type="submit" class="send-btn">→</button>
   </form>
 
-  <!-- НАСТРОЙКИ / БЭКАП / ВЫХОД -->
+  <!-- ОКНО ПРОФИЛЯ -->
   <div class="modal-backdrop" id="settingsModal">
     <div class="modal">
-      <h3>Аккаунт и резервная копия</h3>
+      <h3>Профиль</h3>
       <div class="status" id="accountInfo"></div>
-
-      <div class="divider"></div>
-      <div class="field">
-        <label>Резервное сохранение переписки (.json)</label>
-        <div class="btn-row">
-          <button type="button" class="btn" id="exportBackupBtn">⬇ Скачать бэкап (.json)</button>
-          <button type="button" class="btn" id="importBackupBtn">⬆ Восстановить .json</button>
-          <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" />
-        </div>
-      </div>
+      <div class="status" id="tagsInfo"></div>
 
       <div class="divider"></div>
       <div class="btn-row">
@@ -381,12 +403,15 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "enigma_secure_v2";
+    const STORAGE_KEY = "enigma_auto_e2ee_v5";
     let state = {
       gasUrl: "",
       token: "",
       login: "",
       displayName: "",
+      cryptoKey: "",
+      allowedTags: ["общий", "офис", "семья", "друзья"],
+      activeTag: "общий",
       messages: []
     };
 
@@ -395,6 +420,86 @@
       if (saved) state = { ...state, ...saved };
     } catch (e) {}
 
+    // ================= АВТОМАТИЧЕСКИЙ AES-256-GCM =================
+    let cachedPassphrase = "";
+    let cachedCryptoKey = null;
+
+    async function getAesKey(passphrase) {
+      if (!passphrase) return null;
+      if (cachedCryptoKey && cachedPassphrase === passphrase) return cachedCryptoKey;
+      const enc = new TextEncoder();
+      const keyMaterial = await window.crypto.subtle.importKey(
+        "raw",
+        enc.encode(passphrase),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+      cachedCryptoKey = await window.crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: enc.encode("Enigma_E2EE_AES256_Salt_2026"),
+          iterations: 100000,
+          hash: "SHA-256"
+        },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+      cachedPassphrase = passphrase;
+      return cachedCryptoKey;
+    }
+
+    function bufToBase64(buf) {
+      const bytes = new Uint8Array(buf);
+      let bin = "";
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin);
+    }
+
+    function base64ToBuf(b64) {
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes.buffer;
+    }
+
+    async function encryptAES256(plainText, passphrase) {
+      const key = await getAesKey(passphrase);
+      if (!key) return plainText;
+      const iv = window.crypto.getRandomValues(new Uint8Array(12));
+      const encoded = new TextEncoder().encode(plainText);
+      const cipherBuf = await window.crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        encoded
+      );
+      return "AES256:" + bufToBase64(iv) + ":" + bufToBase64(cipherBuf);
+    }
+
+    async function decryptAES256(storedText, passphrase) {
+      const str = String(storedText || "");
+      if (!str.startsWith("AES256:")) return str;
+      if (!passphrase) return "🔒 [Обновите чат ↻]";
+      try {
+        const parts = str.split(":");
+        if (parts.length !== 3) return "🔒 [Ошибка формата]";
+        const iv = new Uint8Array(base64ToBuf(parts[1]));
+        const cipherBuf = base64ToBuf(parts[2]);
+        const key = await getAesKey(passphrase);
+        const plainBuf = await window.crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: iv },
+          key,
+          cipherBuf
+        );
+        return new TextDecoder().decode(plainBuf);
+      } catch (e) {
+        return "🔒 [Не удалось расшифровать]";
+      }
+    }
+
+    // ================= ИНТЕРФЕЙС =================
     const authScreen = document.getElementById("authScreen");
     const loginForm = document.getElementById("loginForm");
     const authGasUrl = document.getElementById("authGasUrl");
@@ -403,14 +508,21 @@
     const authError = document.getElementById("authError");
     const loginSubmitBtn = document.getElementById("loginSubmitBtn");
 
+    const tagsBar = document.getElementById("tagsBar");
     const messagesEl = document.getElementById("messages");
     const statusText = document.getElementById("statusText");
     const chatForm = document.getElementById("chatForm");
     const msgInput = document.getElementById("msgInput");
     const settingsModal = document.getElementById("settingsModal");
     const accountInfo = document.getElementById("accountInfo");
+    const tagsInfo = document.getElementById("tagsInfo");
 
     let pollTimer = null;
+
+    function formatGroupName(tag) {
+      const clean = String(tag || "общий").replace(/^#/, "").trim();
+      return clean ? clean.charAt(0).toUpperCase() + clean.slice(1) : "Общий";
+    }
 
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -432,6 +544,31 @@
       return await res.json();
     }
 
+    function renderTags() {
+      const tags = (Array.isArray(state.allowedTags) && state.allowedTags.length)
+        ? state.allowedTags
+        : ["общий"];
+      if (!tags.includes(state.activeTag)) {
+        state.activeTag = tags[0];
+      }
+      msgInput.placeholder = `Сообщение в ${formatGroupName(state.activeTag)}...`;
+      tagsBar.innerHTML = tags.map(t => `
+        <button type="button" class="tag-pill ${t === state.activeTag ? "active" : ""}" data-tag="${escapeHtml(t)}">
+          ${escapeHtml(formatGroupName(t))}
+        </button>
+      `).join("");
+
+      tagsBar.querySelectorAll(".tag-pill").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          state.activeTag = btn.dataset.tag;
+          saveState();
+          renderTags();
+          statusText.textContent = `${state.displayName} • ${formatGroupName(state.activeTag)}`;
+          await renderMessages();
+        });
+      });
+    }
+
     function showAuthScreen(errorMsg = "") {
       if (pollTimer) clearInterval(pollTimer);
       authGasUrl.value = state.gasUrl || "";
@@ -441,28 +578,35 @@
       authScreen.classList.remove("hidden");
     }
 
-    function showChatScreen() {
+    async function showChatScreen() {
       authScreen.classList.add("hidden");
-      renderMessages();
+      renderTags();
+      await renderMessages();
       syncMessages();
       if (pollTimer) clearInterval(pollTimer);
       pollTimer = setInterval(syncMessages, 8000);
     }
 
-    function renderMessages() {
-      if (!state.messages.length) {
-        messagesEl.innerHTML = '<div class="empty-state">Сообщений пока нет. Напиши первое сообщение.</div>';
+    async function renderMessages() {
+      const filtered = state.messages.filter(m => (m.tag || "общий") === state.activeTag);
+      if (!filtered.length) {
+        messagesEl.innerHTML = `<div class="empty-state">В чате «${escapeHtml(formatGroupName(state.activeTag))}» пока нет сообщений.</div>`;
         return;
       }
-      messagesEl.innerHTML = state.messages.map(m => {
-        const isOwn = (m.login && m.login === state.login) || m.author === state.displayName;
+      const decryptedItems = await Promise.all(filtered.map(async m => {
+        const plain = await decryptAES256(m.text, state.cryptoKey);
+        return { ...m, plainText: plain };
+      }));
+
+      messagesEl.innerHTML = decryptedItems.map(m => {
+        const isOwn = (m.login && m.login.toLowerCase() === state.login.toLowerCase()) || m.author === state.displayName;
         return `
           <div class="msg ${isOwn ? "own" : "other"}">
             <div class="msg-meta">
               <span>${escapeHtml(m.author || "Участник")}</span>
               <span class="msg-time">${escapeHtml(m.time || "")}</span>
             </div>
-            <div>${escapeHtml(m.text)}</div>
+            <div>${escapeHtml(m.plainText)}</div>
           </div>
         `;
       }).join("");
@@ -481,12 +625,19 @@
           }
           return;
         }
+        if (data.cryptoKey) {
+          state.cryptoKey = data.cryptoKey;
+        }
+        if (Array.isArray(data.allowedTags) && data.allowedTags.length) {
+          state.allowedTags = data.allowedTags;
+          renderTags();
+        }
         if (Array.isArray(data.messages)) {
           state.messages = data.messages;
           saveState();
-          renderMessages();
+          await renderMessages();
         }
-        statusText.textContent = `${state.displayName} • в сети`;
+        statusText.textContent = `${state.displayName} • ${formatGroupName(state.activeTag)}`;
       } catch (e) {
         statusText.textContent = "Ошибка соединения";
       }
@@ -499,7 +650,7 @@
       loginSubmitBtn.textContent = "Проверка...";
 
       state.gasUrl = authGasUrl.value.trim();
-      const loginVal = authLogin.value.trim().toLowerCase();
+      const loginVal = authLogin.value.trim();
       const passVal = authPassword.value;
 
       try {
@@ -513,13 +664,18 @@
           state.token = data.token;
           state.login = loginVal;
           state.displayName = data.displayName || loginVal;
+          state.cryptoKey = data.cryptoKey || "";
+          if (Array.isArray(data.allowedTags) && data.allowedTags.length) {
+            state.allowedTags = data.allowedTags;
+            state.activeTag = data.allowedTags[0];
+          }
           saveState();
-          showChatScreen();
+          await showChatScreen();
         } else {
           authError.textContent = data.error || "Ошибка входа";
         }
       } catch (err) {
-        authError.textContent = "Не удалось связаться со скриптом. Проверь URL и доступ «Все».";
+        authError.textContent = "Не удалось связаться со скриптом. Проверь URL.";
       } finally {
         loginSubmitBtn.disabled = false;
         loginSubmitBtn.textContent = "Войти в Enigma";
@@ -528,28 +684,32 @@
 
     chatForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const text = msgInput.value.trim();
-      if (!text) return;
+      const plainText = msgInput.value.trim();
+      if (!plainText) return;
       msgInput.value = "";
-
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
-      state.messages.push({
-        id: String(Date.now()),
-        login: state.login,
-        author: state.displayName,
-        text,
-        time: timeStr
-      });
-      saveState();
-      renderMessages();
       statusText.textContent = "Отправка...";
 
       try {
+        const cipherText = await encryptAES256(plainText, state.cryptoKey);
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+
+        state.messages.push({
+          id: String(Date.now()),
+          login: state.login,
+          author: state.displayName,
+          tag: state.activeTag,
+          text: cipherText,
+          time: timeStr
+        });
+        saveState();
+        await renderMessages();
+
         const data = await callApi({
           action: "send",
           token: state.token,
-          text: text
+          tag: state.activeTag,
+          text: cipherText
         });
         if (!data.ok && data.error === "UNAUTHORIZED") {
           state.token = "";
@@ -573,7 +733,8 @@
     document.getElementById("syncBtn").addEventListener("click", syncMessages);
 
     document.getElementById("settingsBtn").addEventListener("click", () => {
-      accountInfo.textContent = `Вы вошли как: ${state.displayName} (${state.login})`;
+      accountInfo.textContent = `Участник: ${state.displayName} (${state.login})`;
+      tagsInfo.textContent = `Доступные чаты: ${state.allowedTags.map(formatGroupName).join(", ")}`;
       settingsModal.classList.add("open");
     });
 
@@ -587,54 +748,10 @@
         await callApi({ action: "logout", token: state.token });
       } catch (e) {}
       state.token = "";
+      state.cryptoKey = "";
       state.messages = [];
       saveState();
       showAuthScreen();
-    });
-
-    document.getElementById("exportBackupBtn").addEventListener("click", () => {
-      const dateStr = new Date().toISOString().slice(0, 10);
-      const exportData = {
-        exportedAt: new Date().toISOString(),
-        messages: state.messages
-      };
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `enigma-backup-${dateStr}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    });
-
-    const importFileInput = document.getElementById("importFileInput");
-    document.getElementById("importBackupBtn").addEventListener("click", () => {
-      importFileInput.click();
-    });
-
-    importFileInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const imported = JSON.parse(reader.result);
-          if (imported && Array.isArray(imported.messages)) {
-            state.messages = imported.messages;
-            saveState();
-            renderMessages();
-            alert("Резервная копия загружена на экран!");
-          } else {
-            alert("Неверный формат файла бэкапа.");
-          }
-        } catch (err) {
-          alert("Ошибка чтения файла.");
-        }
-      };
-      reader.readAsText(file);
-      importFileInput.value = "";
     });
 
     if (state.gasUrl && state.token) {
