@@ -1,18 +1,24 @@
 {
-  "name": "Enigma",
+  "name": "ENIGMA — Закрытый чат",
   "short_name": "Enigma",
-  "description": "Приватный PWA-мессенджер Enigma",
-  "start_url": "/Enigma/",
-  "scope": "/Enigma/",
+  "description": "Закрытый зашифрованный мессенджер AES-256",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0b0d12",
   "theme_color": "#0b0d12",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230b0d12'/%3E%3Ccircle cx='256' cy='256' r='170' fill='none' stroke='%23d4af37' stroke-width='24'/%3E%3Ctext x='256' y='305' font-family='sans-serif' font-size='180' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3EE%3C/text%3E%3C/svg%3E",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
